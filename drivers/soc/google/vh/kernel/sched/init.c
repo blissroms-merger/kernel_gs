@@ -97,8 +97,6 @@ extern void rvh_prepare_prio_fork_pixel_mod(void *data, struct task_struct *p);
 
 extern struct cpufreq_governor sched_pixel_gov;
 
-extern int pmu_poll_init(void);
-
 extern bool wait_for_init;
 
 void init_vendor_rt_rq(void)
@@ -136,12 +134,6 @@ static int init_vendor_task_data(void *data)
 static int vh_sched_init(void)
 {
 	int ret;
-
-	ret = pmu_poll_init();
-	if (ret) {
-		pr_err("pmu poll init failed\n");
-		return ret;
-	}
 
 #if IS_ENABLED(CONFIG_UCLAMP_STATS)
 	init_uclamp_stats();
