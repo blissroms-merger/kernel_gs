@@ -21,8 +21,9 @@ enum clk_info_type {
 	BLK_CMU_INFO,
 	TOP_CMU_INFO,
 };
-
+#ifdef CONFIG_CMUCAL_DEBUG
 static struct dentry *rootdir;
+#endif
 static struct cmucal_clk *clk_info;
 static struct vclk *dvfs_domain;
 static u32 cmu_id;
@@ -509,6 +510,7 @@ static const struct file_operations set_freq_fops = {
 	.llseek		= seq_lseek,
 };
 
+#ifdef CONFIG_CMUCAL_DEBUG
 /* caller must hold prepare_lock */
 static int vclk_debug_create_one(struct vclk *vclk, struct dentry *pdentry)
 {
@@ -596,12 +598,15 @@ void cmucal_dbg_mux_dbg_offset(u32 offset)
 	pr_info("cmu_top_mux_dbg_offset : 0x%x\n", offset);
 }
 EXPORT_SYMBOL_GPL(cmucal_dbg_mux_dbg_offset);
+#endif
 
 void cal_register_pd_lookup_cmu_id(void *(*func)(u32 cmu_id))
 {
 	cal_pd_lookup_cmu_id = func;
 }
 EXPORT_SYMBOL_GPL(cal_register_pd_lookup_cmu_id);
+
+#ifdef CONFIG_CMUCAL_DEBUG
 /**
  * vclk_debug_init - lazily create the debugfs clk tree visualization
  */
@@ -653,6 +658,7 @@ int vclk_debug_init(void)
 	return 0;
 }
 EXPORT_SYMBOL_GPL(vclk_debug_init);
+#endif
 #endif
 
 MODULE_LICENSE("GPL");
